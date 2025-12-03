@@ -108,7 +108,7 @@ const csvVocabSchema = z.object({
 
 type CsvVocab = z.infer<typeof csvVocabSchema>;
 
-export async function importFromCsvAction(formData: FormData) {
+export async function importFromCsvAction(prevState: { success: boolean; message: string; }, formData: FormData) {
   const file = formData.get('csvFile') as File | null;
 
   if (!file) {
