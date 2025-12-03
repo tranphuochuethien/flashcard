@@ -12,14 +12,15 @@ export function Flashcard({ card, isFlipped }: FlashcardProps) {
   return (
     <div
       className={cn(
-        'group w-full max-w-xl rounded-lg border bg-card text-card-foreground shadow-sm [perspective:1000px] min-h-80',
-        { 'flipped': isFlipped }
+        'group w-full max-w-xl rounded-lg border bg-transparent text-card-foreground shadow-sm [perspective:1000px] min-h-80'
       )}
       aria-live="polite"
     >
       <div
-        className="relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d]"
-        style={{ transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
+        className={cn(
+            "relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d]",
+            isFlipped && "[transform:rotateY(180deg)]"
+        )}
       >
         {/* Front of the card */}
         <div className="absolute flex h-full w-full flex-col items-center justify-center rounded-lg bg-card p-6 [backface-visibility:hidden]">
@@ -39,7 +40,7 @@ export function Flashcard({ card, isFlipped }: FlashcardProps) {
           
           {/* IT Context area */}
           {card.itContext && (
-            <div className="mt-4 flex-shrink-0">
+            <div className="mt-4 flex-shrink-0 w-full">
                 <div className="text-left text-sm text-accent-foreground max-h-32 overflow-y-auto rounded-md border bg-accent/50 p-4">
                     <p className="font-bold mb-2">IT Context:</p>
                     <p className="whitespace-pre-wrap">{card.itContext}</p>
