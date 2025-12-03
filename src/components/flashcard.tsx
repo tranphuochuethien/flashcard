@@ -27,9 +27,6 @@ export function Flashcard({ card, isFlipped }: FlashcardProps) {
             <p className="text-5xl font-bold font-headline md:text-7xl">{card.kanji}</p>
             <p className="mt-4 text-2xl text-muted-foreground">{card.hiragana}</p>
           </div>
-          <span className="absolute bottom-4 text-xs text-muted-foreground">
-            Japanese
-          </span>
         </div>
 
         {/* Back of the card */}
@@ -49,10 +46,6 @@ export function Flashcard({ card, isFlipped }: FlashcardProps) {
                 </div>
             </div>
           )}
-
-          <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-muted-foreground">
-            Vietnamese
-          </span>
         </div>
       </div>
     </div>
