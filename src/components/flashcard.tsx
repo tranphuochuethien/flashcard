@@ -22,7 +22,7 @@ export function Flashcard({ card, isFlipped }: FlashcardProps) {
         style={{ transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
       >
         {/* Front of the card */}
-        <div className="absolute flex h-full w-full flex-col items-center justify-center p-6 [backface-visibility:hidden]">
+        <div className="absolute flex h-full w-full flex-col items-center justify-center rounded-lg bg-card p-6 [backface-visibility:hidden]">
           <div className="text-center">
             <p className="text-5xl font-bold font-headline md:text-7xl">{card.kanji}</p>
             <p className="mt-4 text-2xl text-muted-foreground">{card.hiragana}</p>
@@ -33,7 +33,7 @@ export function Flashcard({ card, isFlipped }: FlashcardProps) {
         </div>
 
         {/* Back of the card */}
-        <div className="absolute flex h-full w-full flex-col p-6 [backface-visibility:hidden] [transform:rotateY(180deg)]">
+        <div className="absolute flex h-full w-full flex-col rounded-lg bg-card p-6 [backface-visibility:hidden] [transform:rotateY(180deg)]">
            {/* Main content area */}
           <div className="flex-1 flex flex-col items-center justify-center text-center">
             <p className="text-3xl font-bold font-headline md:text-5xl">{card.vietnameseMeaning}</p>
