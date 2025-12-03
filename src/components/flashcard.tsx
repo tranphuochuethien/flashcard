@@ -1,0 +1,54 @@
+'use client';
+
+import { Vocabulary } from '@/lib/types';
+import { cn } from '@/lib/utils';
+
+interface FlashcardProps {
+  card: Vocabulary;
+  isFlipped: boolean;
+}
+
+export function Flashcard({ card, isFlipped }: FlashcardProps) {
+  return (
+    <div
+      className={cn(
+        'group h-80 w-full max-w-xl rounded-lg border bg-card text-card-foreground shadow-sm [perspective:1000px]',
+        { 'flipped': isFlipped }
+      )}
+      aria-live="polite"
+    >
+      <div
+        className="relative h-full w-full transition-transform duration-700 [transform-style:preserve-3d]"
+        style={{ transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
+      >
+        {/* Front of the card */}
+        <div className="absolute flex h-full w-full flex-col items-center justify-center p-6 [backface-visibility:hidden]">
+          <div className="text-center">
+            <p className="text-5xl font-bold font-headline md:text-7xl">{card.kanji}</p>
+            <p className="mt-4 text-2xl text-muted-foreground">{card.hiragana}</p>
+          </div>
+          <span className="absolute bottom-4 text-xs text-muted-foreground">
+            Japanese
+          </span>
+        </div>
+
+        {/* Back of the card */}
+        <div className="absolute flex h-full w-full flex-col items-center justify-center p-6 [backface-visibility:hidden] [transform:rotateY(180deg)]">
+          <div className="text-center">
+            <p className="text-3xl font-bold font-headline md:text-5xl">{card.vietnameseMeaning}</p>
+            <p className="mt-2 text-xl text-muted-foreground">{card.hanViet}</p>
+            {card.itContext && (
+                <div className="mt-6 rounded-md bg-accent/50 p-4 text-sm text-accent-foreground">
+                    <p className="font-bold">IT Context:</p>
+                    <p>{card.itContext}</p>
+                </div>
+            )}
+          </div>
+          <span className="absolute bottom-4 text-xs text-muted-foreground">
+            Vietnamese
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
