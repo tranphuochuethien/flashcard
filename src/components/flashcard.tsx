@@ -33,17 +33,20 @@ export function Flashcard({ card, isFlipped }: FlashcardProps) {
         </div>
 
         {/* Back of the card */}
-        <div className="absolute flex h-full w-full flex-col justify-between p-6 [backface-visibility:hidden] [transform:rotateY(180deg)]">
-          <div className="text-center pt-8">
+        <div className="absolute flex h-full w-full flex-col p-6 [backface-visibility:hidden] [transform:rotateY(180deg)]">
+           {/* Main content area */}
+          <div className="flex-1 flex flex-col items-center justify-center text-center">
             <p className="text-3xl font-bold font-headline md:text-5xl">{card.vietnameseMeaning}</p>
-
             <p className="mt-2 text-xl text-muted-foreground">{card.hanViet}</p>
           </div>
           
+          {/* IT Context area */}
           {card.itContext && (
-            <div className="mt-6 text-left text-sm text-accent-foreground max-h-40 overflow-y-auto rounded-md border bg-accent/50 p-4">
-              <p className="font-bold mb-2">IT Context:</p>
-              <p className="whitespace-pre-wrap">{card.itContext}</p>
+            <div className="mt-4 flex-shrink-0">
+                <div className="text-left text-sm text-accent-foreground max-h-32 overflow-y-auto rounded-md border bg-accent/50 p-4">
+                    <p className="font-bold mb-2">IT Context:</p>
+                    <p className="whitespace-pre-wrap">{card.itContext}</p>
+                </div>
             </div>
           )}
 
