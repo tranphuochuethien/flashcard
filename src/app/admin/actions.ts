@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { addVocabulary, deleteVocabulary, updateVocabulary, addManyVocabulary } from '@/lib/data';
 import { enhanceItContextNote, EnhanceItContextNoteInput } from '@/ai/flows/ai-note-enhancement';
 import type { Vocabulary } from '@/lib/types';
+import Papa from 'papaparse';
 
 const vocabSchema = z.object({
   kanji: z.string().min(1, 'Kanji is required.'),
@@ -97,42 +98,61 @@ export async function enhanceNoteAction(input: EnhanceItContextNoteInput) {
   }
 }
 
+const csvVocabSchema = z.object({
+    kanji: z.string(),
+    hiragana: z.string(),
+    hanViet: z.string(),
+    vietnameseMeaning: z.string(),
+    itContext: z.string().optional(),
+});
+
+type CsvVocab = z.infer<typeof csvVocabSchema>;
+
 export async function importFromCsvAction(formData: FormData) {
   const file = formData.get('csvFile') as File | null;
 
   if (!file) {
     return { success: false, message: 'No file uploaded.' };
   }
-  
-  // In a real application, you would parse the CSV file here
-  // and insert the data into your database.
-  // We will simulate this with a few sample entries.
-  console.log("Simulating CSV import for file:", file.name);
 
-  // Example placeholder logic:
-  const sampleData: Omit<Vocabulary, 'id' | 'createdAt'>[] = [
-    {
-      kanji: "認証",
-      hiragana: "にんしょう",
-      hanViet: "Nhận Chứng",
-      vietnameseMeaning: "Xác thực, chứng thực",
-      itContext: "Authentication, e.g., ユーザー認証 (user authentication)."
-    },
-    {
-      kanji: "承認",
-      hiragana: "しょうにん",
-      hanViet: "Thừa Nhận",
-      vietnameseMeaning: "Phê duyệt, cho phép",
-      itContext: "Authorization, e.g., アクセス承認 (access authorization)."
-    }
-  ];
-
-  try {
-    const count = await addManyVocabulary(sampleData);
-    revalidatePath('/admin');
-    revalidatePath('/');
-    return { success: true, message: `Successfully imported ${count} records (simulated).` };
-  } catch (error) {
-    return { success: false, message: 'Failed to import records.' };
+  if (file.type !== 'text/csv') {
+    return { success: false, message: 'Invalid file type. Please upload a CSV file.' };
   }
+
+  const fileText = await file.text();
+
+  return new Promise((resolve) => {
+    Papa.parse<CsvVocab>(fileText, {
+      header: true,
+      skipEmptyLines: true,
+      complete: async (results) => {
+        try {
+          const validatedData = z.array(csvVocabSchema).safeParse(results.data);
+          
+          if (!validatedData.success) {
+            console.error("CSV validation error:", validatedData.error);
+            resolve({ success: false, message: 'CSV data is invalid. Check columns and content.' });
+            return;
+          }
+
+          if (validatedData.data.length === 0) {
+            resolve({ success: false, message: 'CSV file is empty or contains no valid data.' });
+            return;
+          }
+
+          const count = await addManyVocabulary(validatedData.data);
+          revalidatePath('/admin');
+          revalidatePath('/');
+          resolve({ success: true, message: `Successfully imported ${count} records.` });
+        } catch (error) {
+          console.error("Import error:", error);
+          resolve({ success: false, message: 'Failed to import records from CSV.' });
+        }
+      },
+      error: (error) => {
+        console.error("PapaParse error:", error);
+        resolve({ success: false, message: 'Failed to parse CSV file.' });
+      },
+    });
+  });
 }
