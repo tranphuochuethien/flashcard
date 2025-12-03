@@ -1,6 +1,6 @@
 'use client';
 
-import { useForm, useFormContext, Controller } from 'react-hook-form';
+import { useForm, useFormContext, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useFormState } from 'react-dom';
@@ -142,39 +142,41 @@ export default function VocabForm({ vocab, onSuccess }: VocabFormProps) {
   }, [state, toast, form, vocab, onSuccess]);
   
   return (
-    <form action={dispatch} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="kanji">Kanji (Từ gốc)</Label>
-        <Input id="kanji" {...form.register('kanji')} />
-        {errors.kanji && <p className="text-sm text-destructive">{errors.kanji.message}</p>}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="hiragana">Hiragana</Label>
-        <Input id="hiragana" {...form.register('hiragana')} />
-        {errors.hiragana && <p className="text-sm text-destructive">{errors.hiragana.message}</p>}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="hanViet">Hán Việt</Label>
-        <Input id="hanViet" {...form.register('hanViet')} />
-        {errors.hanViet && <p className="text-sm text-destructive">{errors.hanViet.message}</p>}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="vietnameseMeaning">Nghĩa tiếng Việt</Label>
-        <Input id="vietnameseMeaning" {...form.register('vietnameseMeaning')} />
-        {errors.vietnameseMeaning && <p className="text-sm text-destructive">{errors.vietnameseMeaning.message}</p>}
-      </div>
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="itContext">Ghi chú (IT Context)</Label>
-          <AIButton />
+    <FormProvider {...form}>
+      <form action={dispatch} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="kanji">Kanji (Từ gốc)</Label>
+          <Input id="kanji" {...form.register('kanji')} />
+          {errors.kanji && <p className="text-sm text-destructive">{errors.kanji.message}</p>}
         </div>
-        <Textarea id="itContext" {...form.register('itContext')} rows={4} />
-         {errors.itContext && <p className="text-sm text-destructive">{errors.itContext.message}</p>}
-      </div>
-      <Button type="submit" disabled={isSubmitting} className="w-full">
-        {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {vocab ? 'Update Word' : 'Add Word'}
-      </Button>
-    </form>
+        <div className="space-y-2">
+          <Label htmlFor="hiragana">Hiragana</Label>
+          <Input id="hiragana" {...form.register('hiragana')} />
+          {errors.hiragana && <p className="text-sm text-destructive">{errors.hiragana.message}</p>}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="hanViet">Hán Việt</Label>
+          <Input id="hanViet" {...form.register('hanViet')} />
+          {errors.hanViet && <p className="text-sm text-destructive">{errors.hanViet.message}</p>}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="vietnameseMeaning">Nghĩa tiếng Việt</Label>
+          <Input id="vietnameseMeaning" {...form.register('vietnameseMeaning')} />
+          {errors.vietnameseMeaning && <p className="text-sm text-destructive">{errors.vietnameseMeaning.message}</p>}
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="itContext">Ghi chú (IT Context)</Label>
+            <AIButton />
+          </div>
+          <Textarea id="itContext" {...form.register('itContext')} rows={4} />
+           {errors.itContext && <p className="text-sm text-destructive">{errors.itContext.message}</p>}
+        </div>
+        <Button type="submit" disabled={isSubmitting} className="w-full">
+          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {vocab ? 'Update Word' : 'Add Word'}
+        </Button>
+      </form>
+    </FormProvider>
   );
 }
