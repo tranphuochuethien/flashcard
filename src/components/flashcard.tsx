@@ -12,7 +12,7 @@ export function Flashcard({ card, isFlipped }: FlashcardProps) {
   return (
     <div
       className={cn(
-        'group h-80 w-full max-w-xl rounded-lg border bg-card text-card-foreground shadow-sm [perspective:1000px]',
+        'group w-full max-w-xl rounded-lg border bg-card text-card-foreground shadow-sm [perspective:1000px] min-h-80',
         { 'flipped': isFlipped }
       )}
       aria-live="polite"
@@ -33,18 +33,21 @@ export function Flashcard({ card, isFlipped }: FlashcardProps) {
         </div>
 
         {/* Back of the card */}
-        <div className="absolute flex h-full w-full flex-col items-center justify-center p-6 [backface-visibility:hidden] [transform:rotateY(180deg)]">
-          <div className="text-center">
+        <div className="absolute flex h-full w-full flex-col justify-between p-6 [backface-visibility:hidden] [transform:rotateY(180deg)]">
+          <div className="text-center pt-8">
             <p className="text-3xl font-bold font-headline md:text-5xl">{card.vietnameseMeaning}</p>
+
             <p className="mt-2 text-xl text-muted-foreground">{card.hanViet}</p>
-            {card.itContext && (
-                <div className="mt-6 rounded-md bg-accent/50 p-4 text-sm text-accent-foreground">
-                    <p className="font-bold">IT Context:</p>
-                    <p>{card.itContext}</p>
-                </div>
-            )}
           </div>
-          <span className="absolute bottom-4 text-xs text-muted-foreground">
+          
+          {card.itContext && (
+            <div className="mt-6 text-left text-sm text-accent-foreground max-h-40 overflow-y-auto rounded-md border bg-accent/50 p-4">
+              <p className="font-bold mb-2">IT Context:</p>
+              <p className="whitespace-pre-wrap">{card.itContext}</p>
+            </div>
+          )}
+
+          <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-muted-foreground">
             Vietnamese
           </span>
         </div>
