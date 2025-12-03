@@ -106,7 +106,10 @@ export default function VocabForm({ vocab, onSuccess }: VocabFormProps) {
 
   const form = useForm<VocabFormValues>({
     resolver: zodResolver(vocabSchema),
-    defaultValues: vocab || {
+    defaultValues: vocab ? {
+      ...vocab,
+      itContext: vocab.itContext ?? '',
+    } : {
       kanji: '',
       hiragana: '',
       hanViet: '',

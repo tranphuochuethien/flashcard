@@ -47,7 +47,7 @@ export async function addVocabularyAction(
 }
 
 export async function updateVocabularyAction(
-  id: string,
+  id: number,
   prevState: FormState,
   formData: FormData
 ): Promise<FormState> {
@@ -76,7 +76,7 @@ export async function updateVocabularyAction(
 }
 
 
-export async function deleteVocabularyAction(id: string) {
+export async function deleteVocabularyAction(id: number) {
   try {
     await deleteVocabulary(id);
     revalidatePath('/admin');
