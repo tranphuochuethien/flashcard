@@ -3,8 +3,7 @@
 import { useForm, useFormContext, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useFormState } from 'react-dom';
-import { useEffect, useTransition } from 'react';
+import { useActionState, useEffect, useTransition } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -101,7 +100,7 @@ function AIButton() {
 
 export default function VocabForm({ vocab, onSuccess }: VocabFormProps) {
   const formAction = vocab ? updateVocabularyAction.bind(null, vocab.id) : addVocabularyAction;
-  const [state, dispatch] = useFormState(formAction, initialState);
+  const [state, dispatch] = useActionState(formAction, initialState);
   const { toast } = useToast();
 
   const form = useForm<VocabFormValues>({

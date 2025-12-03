@@ -1,13 +1,11 @@
 'use client';
 
-import { useRef, useTransition } from 'react';
-import { useFormState } from 'react-dom';
+import { useRef, useTransition, useActionState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { importFromCsvAction } from '../actions';
-import { useEffect } from 'react';
 import { Loader2, Upload } from 'lucide-react';
 
 const initialState = {
@@ -16,7 +14,7 @@ const initialState = {
 };
 
 export default function BatchImport() {
-  const [state, dispatch] = useFormState(importFromCsvAction, initialState);
+  const [state, dispatch] = useActionState(importFromCsvAction, initialState);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
