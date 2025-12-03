@@ -14,7 +14,8 @@ const initialState = {
 };
 
 export default function BatchImport() {
-  const [state, dispatch] = useActionState(importFromCsvAction, initialState);
+  // Pass the action directly to the form component
+  const [state, formAction] = useActionState(importFromCsvAction, initialState);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
@@ -29,19 +30,20 @@ export default function BatchImport() {
       }
     }
   }, [state, toast]);
-
-  const handleFormSubmit = (formData: FormData) => {
-    startTransition(async () => {
-      await dispatch(formData);
+  
+  const handleFormAction = (formData: FormData) => {
+    startTransition(() => {
+      formAction(formData);
     });
-  };
+  }
 
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
         Upload a CSV file with columns: `kanji`, `hiragana`, `hanViet`, `vietnameseMeaning`, `itContext`.
       </p>
-      <form ref={formRef} action={handleFormSubmit} className="space-y-4">
+      {/* Use the formAction returned by useActionState */}
+      <form ref={formRef} action={handleFormAction} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="csvFile">CSV File</Label>
           <Input id="csvFile" name="csvFile" type="file" accept=".csv" required />

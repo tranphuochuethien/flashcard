@@ -42,7 +42,7 @@ const enhanceItContextNotePrompt = ai.definePrompt({
   Han Viet: {{{hanViet}}}
   Vietnamese Meaning: {{{vietnameseMeaning}}}
   Existing Note: {{{existingNote}}}
-
+  using vietnamese language,
   Enhanced IT Context Note:`,
 });
 
